@@ -1,6 +1,17 @@
-public class Geisternetz
-{
-    private int id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+@Entity //Instanzen dieser Klasse werden in DB gespeichert
+public class Geisternetz implements Serializable {
+	
+	@Id
+    @GeneratedValue //Value automatisch vom persistence provider definiert
+    private int id; //primary Key für DB
     private int groesse;
     private float breitengrad;
     private float laengengrad;
@@ -10,15 +21,17 @@ public class Geisternetz
 
     public Geisternetz()
     {
-		this.groesse = 0;
+		this.id = 0;
+    	this.groesse = 0;
 		this.breitengrad = 0f;
 		this.laengengrad = 0f;
 		this.status = Status.GEMELDET;
 		this.bergendePerson = null;
     }
 
-    public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status, Person person)
+    public Geisternetz(int id, int groesse, float breitengrad, float laengengrad, Status status, Person person)
     {
+    	this.id = id;
     	this.groesse = groesse;
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
@@ -27,6 +40,16 @@ public class Geisternetz
     }
 
 
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+    
     public int getGroesse()
     {
         return groesse;

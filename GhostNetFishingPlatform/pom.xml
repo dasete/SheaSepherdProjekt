@@ -28,12 +28,14 @@
   </build>
 
   <dependencies>
+  
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <version>5.0.0</version>
       <scope>provided</scope>
     </dependency>
+    
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.faces</artifactId>
@@ -51,6 +53,7 @@
       <artifactId>jakarta.enterprise.cdi-api</artifactId>
       <version>3.0.0</version>
     </dependency>
+    
     <dependency>
       <groupId>org.jboss.weld.servlet</groupId>
       <artifactId>weld-servlet-core</artifactId>
@@ -63,6 +66,25 @@
       <version>11.0.0</version>
       <classifier>jakarta</classifier>
     </dependency>
+    
+    <dependency>
+      <groupId>org.languagetool</groupId>
+      <artifactId>language-de</artifactId>
+      <version>6.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbyclient</artifactId>
+      <version>10.17.1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.2.24.Final</version>
+    </dependency>
+    
     
   </dependencies>
 </project>
