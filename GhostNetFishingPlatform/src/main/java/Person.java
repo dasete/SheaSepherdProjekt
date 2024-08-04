@@ -9,13 +9,13 @@ import java.util.ArrayList;
 @Entity //Instanzen dieser Klasse werden in DB gespeichert
 public class Person implements Serializable {
 	@Id
-    @GeneratedValue //Value automatisch vom persistence provider definiert
+    //@GeneratedValue //Value automatisch vom persistence provider definiert
 	private int id; //primary key für DB
 	private String vorname;
 	private String nachname;
 	private String telefonnummer;
-	@OneToMany(fetch= FetchType.EAGER)
-	private List<Geisternetz> zuBergendeGeisternetze = new ArrayList<>();
+	//@OneToMany(fetch= FetchType.EAGER)
+	//private List<Geisternetz> zuBergendeGeisternetze = new ArrayList<>();
 	
 	public Person()
 	{

@@ -18,7 +18,7 @@ public class GeisternetzDAO {
 
     public GeisternetzDAO() {
         try {
-            entityManager = Persistence.createEntityManagerFactory("ghostNetFishing").createEntityManager();
+            entityManager = Persistence.createEntityManagerFactory("ghostnetfishing").createEntityManager();
             criteriaBuilder = entityManager.getCriteriaBuilder();
 
             long count = getGeisternetzCount();

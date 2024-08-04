@@ -10,13 +10,13 @@ import java.util.ArrayList;
 public class Geisternetz implements Serializable {
 	
 	@Id
-    @GeneratedValue //Value automatisch vom persistence provider definiert
+    //@GeneratedValue //Value automatisch vom persistence provider definiert
     private int id; //primary Key für DB
     private int groesse;
     private float breitengrad;
     private float laengengrad;
     private Status status;
-    private Person bergendePerson;
+    //private Person bergendePerson;
 
 
     public Geisternetz()
@@ -26,17 +26,17 @@ public class Geisternetz implements Serializable {
 		this.breitengrad = 0f;
 		this.laengengrad = 0f;
 		this.status = Status.GEMELDET;
-		this.bergendePerson = null;
+		//this.bergendePerson = null;
     }
 
-    public Geisternetz(int id, int groesse, float breitengrad, float laengengrad, Status status, Person person)
+    public Geisternetz(int id, int groesse, float breitengrad, float laengengrad, Status status)
     {
     	this.id = id;
     	this.groesse = groesse;
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
 		this.status = status;
-		this.bergendePerson = person;
+		//this.bergendePerson = person;
     }
 
 
@@ -87,12 +87,15 @@ public class Geisternetz implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-
+	/*
 	public Person getBergendePerson() {
 		return bergendePerson;
 	}
 	
+	
 	public void setBergendePerson(Person bergendePerson) {
 		this.bergendePerson = bergendePerson;
 	}
+	*/
+	
 }
