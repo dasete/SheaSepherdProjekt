@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Entity //Instanzen dieser Klasse werden in DB gespeichert
 public class Person implements Serializable {
 	@Id
-    //@GeneratedValue //Value automatisch vom persistence provider definiert
+    @GeneratedValue //Value automatisch vom persistence provider definiert
 	private int id; //primary key für DB
 	private String vorname;
 	private String nachname;
@@ -30,10 +30,22 @@ public class Person implements Serializable {
 	
 	public Person(String vorname, String nachname, String telefonnummer)
 	{
-		this(vorname, nachname);
+		this.vorname = vorname;
+		this.nachname = nachname;
 		this.telefonnummer = telefonnummer;
 	}
 
+	
+	public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+	
 	public String getVorname() {
 		return vorname;
 	}

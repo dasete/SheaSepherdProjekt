@@ -10,33 +10,43 @@ import java.util.ArrayList;
 public class Geisternetz implements Serializable {
 	
 	@Id
-    //@GeneratedValue //Value automatisch vom persistence provider definiert
+    @GeneratedValue //Value automatisch vom persistence provider definiert
     private int id; //primary Key für DB
     private int groesse;
     private float breitengrad;
     private float laengengrad;
     private Status status;
-    //private Person bergendePerson;
+    @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
+    private Person bergendePerson;
+    @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
+    private Person meldendePerson;
 
 
     public Geisternetz()
     {
-		this.id = 0;
-    	this.groesse = 0;
-		this.breitengrad = 0f;
-		this.laengengrad = 0f;
 		this.status = Status.GEMELDET;
 		//this.bergendePerson = null;
+		//this.meldendePerson = null;
     }
 
-    public Geisternetz(int id, int groesse, float breitengrad, float laengengrad, Status status)
+    public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status)
     {
-    	this.id = id;
+    	//this.id = id;
     	this.groesse = groesse;
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
 		this.status = status;
-		//this.bergendePerson = person;
+    }
+    
+    public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status, Person bPerson, Person mPerson)
+    {
+    	//this.id = id;
+    	this.groesse = groesse;
+		this.breitengrad = breitengrad;
+		this.laengengrad = laengengrad;
+		this.status = status;
+		this.bergendePerson = bPerson;
+		this.meldendePerson = mPerson;
     }
 
 
@@ -87,7 +97,7 @@ public class Geisternetz implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	/*
+	
 	public Person getBergendePerson() {
 		return bergendePerson;
 	}
@@ -96,6 +106,14 @@ public class Geisternetz implements Serializable {
 	public void setBergendePerson(Person bergendePerson) {
 		this.bergendePerson = bergendePerson;
 	}
-	*/
+	
+	public Person getMeldendePerson() {
+		return meldendePerson;
+	}
+	
+	
+	public void setMeldendePerson(Person meldendePerson) {
+		this.meldendePerson = meldendePerson;
+	}
 	
 }
