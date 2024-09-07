@@ -5,65 +5,50 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
       
 	<h:head>
-	  <link rel="stylesheet" type="text/css" media="screen" href="style.css"/>
-	  <title>SheaSepherd</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="style.css"/>
+		<title>SheaSepherd</title>
 	</h:head>
 	
 	<h:body>
 		<p><img id="kopf_links" src="logo.png" width="250" alt="Logo"/></p>
 		<h1>Netz melden</h1>
-	   
 		<h:form>
 			<h:commandButton action="index.xhtml?faces-redirect=true" value="Abbrechen" immediate="true"/>
 		</h:form>
-		 <p/>
+		<p/>
 		<h:form>
-
-	<h2>Bitte persönliche Informationen eintragen</h2>
-	  
-  	 <h:panelGrid columns="3">
-          
-     <h:outputLabel value="Vorname: " for="vorname"/>
-     <h:inputText id="vorname" value="#{geisternetzController.meldendePerson.vorname}" size="40"/>
-     <h:message for="vorname" styleClass="error"/>
-
-     <h:outputLabel value="Nachname: " for="nachname"/>
-     <h:inputText id="nachname" value="#{geisternetzController.meldendePerson.nachname}" size="40"/>
-     <h:message for="nachname" styleClass="error"/>
-
-     <h:outputLabel value="Telefonnummer (Optional): " for="telefonnummer"/>
-     <h:inputText id="telefonnummer" value="#{geisternetzController.meldendePerson.telefonnummer}" size="40"/>
-     <h:message for="telefonnummer" styleClass="error"/>
-     
-    </h:panelGrid>
-	 
-	<p/>
-	
-	<h2>Bitte Informationen über das Geisternetz eintragen</h2>
-    
-    <h:panelGrid columns="3" >
-     
-     <h:outputLabel value="Geschätzte Größe in Meter: " for="groesse"/>
-     <h:inputText id="groesse" value="#{geisternetzController.neuesGeisternetz.groesse}" size="40"/>
-     <h:message for="groesse" styleClass="error"/>
-     
-     <h:outputLabel value="Geographische Koordinaten - Breitengrad " for="breitengrad"/>
-     <h:inputText id="breitengrad" value="#{geisternetzController.neuesGeisternetz.breitengrad}" size="40"/>
-     <h:message for="breitengrad" styleClass="error"/>
-     
-     <h:outputLabel value="Geographische Koordinaten - Längengrad " for="laengengrad"/>
-     <h:inputText id="laengengrad" value="#{geisternetzController.neuesGeisternetz.laengengrad}" size="40"/>
-     <h:message for="laengengrad" styleClass="error"/>
-
-    </h:panelGrid>
-    
-    <p/>
-    
-    <h:commandButton action="#{geisternetzController.meldeInformationenSpeichern}" value="Meldeinformationen bestätigen" />
-    
-	</h:form>
-
-		
+			<h2>Bitte persönliche Informationen eintragen</h2>
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Vorname: " for="vorname"/>
+				<h:inputText id="vorname" value="#{geisternetzController.meldendePerson.vorname}" size="40"/>
+				<h:message for="vorname" styleClass="error"/>
+				
+				<h:outputLabel value="Nachname: " for="nachname"/>
+				<h:inputText id="nachname" value="#{geisternetzController.meldendePerson.nachname}" size="40"/>
+				<h:message for="nachname" styleClass="error"/>
+				
+				<h:outputLabel value="Telefonnummer (Optional): " for="telefonnummer"/>
+				<h:inputText id="telefonnummer" value="#{geisternetzController.meldendePerson.telefonnummer}" size="40"/>
+				<h:message for="telefonnummer" styleClass="error"/>
+			</h:panelGrid>
+			<p/>
+			<h2>Bitte Informationen über das Geisternetz eintragen</h2>
+			<h:panelGrid columns="3" >
+				<h:outputLabel value="Geschätzte Größe in Meter: " for="groesse"/>
+				<h:inputText id="groesse" value="#{geisternetzController.neuesGeisternetz.groesse}" size="40"/>
+				<h:message for="groesse" styleClass="error"/>
+				 
+				<h:outputLabel value="Geographische Koordinaten - Breitengrad " for="breitengrad"/>
+				<h:inputText id="breitengrad" value="#{geisternetzController.neuesGeisternetz.breitengrad}" size="40"/>
+				<h:message for="breitengrad" styleClass="error"/>
+				 
+				<h:outputLabel value="Geographische Koordinaten - Längengrad " for="laengengrad"/>
+				<h:inputText id="laengengrad" value="#{geisternetzController.neuesGeisternetz.laengengrad}" size="40"/>
+				<h:message for="laengengrad" styleClass="error"/>
+			</h:panelGrid>
+			<p/>
+			<h:commandButton action="#{geisternetzController.meldeInformationenSpeichern}" value="Meldeinformationen bestätigen" />
+		</h:form>	
 		<p id="fussnote">Bitte beachten Sie: <br/> Diese Seite ist nur ein Entwurf!</p>
 	</h:body>
 </html>

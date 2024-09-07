@@ -18,6 +18,51 @@
 	  </h:form>
 	  
 	  <h2>Liste aller aufgenommenen Geisternetze:</h2>
+	  
+	  <h:dataTable var="geisternetz" value="#{platform.netzListe}"
+	            styleClass="geisternetz" rowClasses="ungerade, gerade">
+		<h:column>
+		  <f:facet name="header">Nr</f:facet>
+		  <h:outputText value="#{geisternetz.id}"/>
+		</h:column>
+		
+		<h:column>
+		  <f:facet name="header">Größe in Meter</f:facet>
+		  <h:outputText value="#{geisternetz.groesse}"/>
+		</h:column>
+		
+		<h:column>
+		  <f:facet name="header">GPS-Koordinaten</f:facet>
+		  <h:outputText value="N#{geisternetz.breitengrad}°, E#{geisternetz.laengengrad}°"/>
+		</h:column>
+		
+		<h:column>
+		  <f:facet name="header">Status</f:facet>
+		  <h:outputText value="#{geisternetz.status}"/>
+		</h:column>
+		
+		<h:column>
+		  <f:facet name="header">Bergungsabsicht eintragen</f:facet>
+		  <h:form>
+		    <h:commandButton action="bergungBeabsichtigen.xhtml?faces-redirect=true" value="Bergungsabsicht eintragen" immediate="true"/>
+		  </h:form>
+		</h:column>
+		
+		<h:column>
+		  <f:facet name="header">Bergung bestätigen</f:facet>
+		  <h:form>
+		    <h:commandButton action="bergungBestaetigen.xhtml?faces-redirect=true" value="Bergung bestätigen" immediate="true"/>
+		  </h:form>
+		</h:column>
+		
+		<h:column>
+		  <f:facet name="header">Netz als Verschollen melden</f:facet>
+		  <h:form>
+		    <h:commandButton action="netzVerschollen.xhtml?faces-redirect=true" value="Netz als Verschollen melden" immediate="true"/>
+		  </h:form>
+		</h:column>
+	   
+	</h:dataTable>
 	
 	
 	<p id="fussnote">Bitte beachten Sie: <br/> Diese Seite ist nur ein Entwurf!</p>

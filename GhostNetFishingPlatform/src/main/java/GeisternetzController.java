@@ -20,12 +20,14 @@ public class GeisternetzController{
 	@Inject
     GeisternetzDAO geisternetzDAO;
 	
+	// in index.xhml von Button ausgeführt
 	public String netzMelden() {
 		erstelleMeldendePerson();
 		erstelleGeisternetz();
 		return "netzMelden.xhtml?faces-redirect=true";
 	}
 	
+	// in netzMelden.xthml in Button aufgerufen
 	public String meldeInformationenSpeichern() {
 		neuesGeisternetz.setMeldendePerson(this.meldendePerson);
 		
@@ -41,7 +43,8 @@ public class GeisternetzController{
         this.neuesGeisternetz = null;
 		return "index.xhtml?faces-redirect=true";
 	}
-	
+
+	// von netzMelden() in diesem Script ausgeführt
 	private void erstelleGeisternetz() {
 		if (this.neuesGeisternetz != null) {
 			this.neuesGeisternetz = null;
@@ -49,7 +52,7 @@ public class GeisternetzController{
 		this.neuesGeisternetz = new Geisternetz();
 	}
 	
-	
+	// von netzMelden() in diesem Script ausgeführt
 	private void erstelleMeldendePerson() {
 		if (this.meldendePerson != null) {
 			this.meldendePerson = null;
@@ -65,7 +68,6 @@ public class GeisternetzController{
 	public void setNeuesGeisternetz(Geisternetz neuesGeisternetz) {
 		this.neuesGeisternetz = neuesGeisternetz;
 	}
-	
 	
 	public Person getMeldendePerson() {
 		return meldendePerson;

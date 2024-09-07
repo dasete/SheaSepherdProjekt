@@ -2,8 +2,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
-import java.util.Arrays;
-import java.util.List;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -28,6 +27,11 @@ public class Platform implements Serializable {
     public Platform()
     {
     	
+    }
+    
+    public Collection<Geisternetz> getNetzListe()
+    {
+        return netzListe;
     }
 
 }

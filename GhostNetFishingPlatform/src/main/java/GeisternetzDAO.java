@@ -45,10 +45,11 @@ public class GeisternetzDAO {
         return entityManager.createQuery(cq).getSingleResult();
     }
 
-    public Geisternetz getGeisternetzAtIndex(int pos) {
+    
+    public Geisternetz getGeisternetzAtIndex(int idx) {
         CriteriaQuery<Geisternetz> cq = criteriaBuilder.createQuery(Geisternetz.class);
         Root<Geisternetz> variableRoot = cq.from(Geisternetz.class);
-        return entityManager.createQuery(cq).setMaxResults(1).setFirstResult(pos).getSingleResult();
+        return entityManager.createQuery(cq).setMaxResults(1).setFirstResult(idx).getSingleResult();
     }
    
     

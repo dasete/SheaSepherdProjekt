@@ -19,7 +19,7 @@ public class Geisternetz implements Serializable {
     @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
     private Person bergendePerson;
     @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
-    private Person meldendePerson;
+    private Person meldendePerson; // notwendig? sollte es nicht gemmeldetVonPerson heissen?
 
 
     public Geisternetz()
@@ -31,7 +31,6 @@ public class Geisternetz implements Serializable {
 
     public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status)
     {
-    	//this.id = id;
     	this.groesse = groesse;
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
@@ -40,7 +39,6 @@ public class Geisternetz implements Serializable {
     
     public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status, Person bPerson, Person mPerson)
     {
-    	//this.id = id;
     	this.groesse = groesse;
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
