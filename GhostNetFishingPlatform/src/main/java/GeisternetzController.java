@@ -29,7 +29,7 @@ public class GeisternetzController{
 	
 	// in netzMelden.xthml in Button aufgerufen
 	public String meldeInformationenSpeichern() {
-		neuesGeisternetz.setMeldendePerson(this.meldendePerson);
+		neuesGeisternetz.setGemeldetVon(this.meldendePerson);
 		
 		System.out.println(neuesGeisternetz.getGroesse());
 		System.out.println(neuesGeisternetz.getBreitengrad());

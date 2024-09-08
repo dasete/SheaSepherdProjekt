@@ -19,7 +19,9 @@ public class Geisternetz implements Serializable {
     @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
     private Person bergendePerson;
     @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
-    private Person meldendePerson; // notwendig? sollte es nicht gemmeldetVonPerson heissen?
+    private Person gemeldetVon; // notwendig? sollte es nicht gemmeldetVonPerson heissen?
+    @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
+    private Person verschollenGemeldetVon;
 
 
     public Geisternetz()
@@ -44,7 +46,7 @@ public class Geisternetz implements Serializable {
 		this.laengengrad = laengengrad;
 		this.status = status;
 		this.bergendePerson = bPerson;
-		this.meldendePerson = mPerson;
+		this.gemeldetVon = mPerson;
     }
 
 
@@ -105,13 +107,22 @@ public class Geisternetz implements Serializable {
 		this.bergendePerson = bergendePerson;
 	}
 	
-	public Person getMeldendePerson() {
-		return meldendePerson;
+	public Person getGemeldetVon() {
+		return gemeldetVon;
 	}
 	
 	
-	public void setMeldendePerson(Person meldendePerson) {
-		this.meldendePerson = meldendePerson;
+	public void setGemeldetVon(Person gemeldetVon) {
+		this.gemeldetVon = gemeldetVon;
+	}
+	
+	public Person getVerschollenGemeldetVon() {
+		return verschollenGemeldetVon;
+	}
+	
+	
+	public void setVerschollenGemeldetVon(Person verschollenGemeldetVon) {
+		this.verschollenGemeldetVon = verschollenGemeldetVon;
 	}
 	
 }
