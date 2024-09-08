@@ -14,7 +14,8 @@ public class Person implements Serializable {
 	private String vorname;
 	private String nachname;
 	private String telefonnummer;
-
+	
+	/*
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Geisternetz> zuBergendeGeisternetze = new ArrayList<>();
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
@@ -23,6 +24,7 @@ public class Person implements Serializable {
 	private List<Geisternetz> geborgendeGeisternetze = new ArrayList<>();
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Geisternetz> verschollenGemeldeteGeisternetze = new ArrayList<>();
+	*/
 	
 	public Person()
 	{
@@ -76,7 +78,7 @@ public class Person implements Serializable {
 		this.telefonnummer = telefonnummer;
 	}
 	
-	
+	/*
 	public List<Geisternetz> getZuBergendeGeisternetze() {
 		return zuBergendeGeisternetze;
 	}
@@ -107,4 +109,5 @@ public class Person implements Serializable {
 	public void setVerschollenGemeldeteGeisternetze( List<Geisternetz> verschollenGemeldeteGeisternetze) {
 		this.verschollenGemeldeteGeisternetze = verschollenGemeldeteGeisternetze;
 	}
+	*/
 }
