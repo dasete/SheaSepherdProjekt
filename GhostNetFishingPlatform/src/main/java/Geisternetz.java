@@ -12,9 +12,9 @@ public class Geisternetz implements Serializable {
 	@Id
     @GeneratedValue //Value automatisch vom persistence provider definiert
     private int id; //primary Key für DB
-    private int groesse;
     private float breitengrad;
     private float laengengrad;
+    private int groesse;
     private Status status;
     @ManyToOne(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
     private Person bergendePerson;
@@ -31,24 +31,14 @@ public class Geisternetz implements Serializable {
 		//this.meldendePerson = null;
     }
 
-    public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status)
+    public Geisternetz(float breitengrad, float laengengrad, int groesse, Status status, Person mPerson)
     {
-    	this.groesse = groesse;
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
+		this.groesse = groesse;
 		this.status = status;
-    }
-    
-    public Geisternetz(int groesse, float breitengrad, float laengengrad, Status status, Person bPerson, Person mPerson)
-    {
-    	this.groesse = groesse;
-		this.breitengrad = breitengrad;
-		this.laengengrad = laengengrad;
-		this.status = status;
-		this.bergendePerson = bPerson;
 		this.gemeldetVon = mPerson;
     }
-
 
     public int getId()
     {

@@ -16,39 +16,58 @@
 			<h:commandButton action="index.xhtml?faces-redirect=true" value="Abbrechen" immediate="true"/>
 		</h:form>
 		<p/>
+		
+		<h:form>
+        <!-- Growl-Komponente für globale Meldungen -->
+        <p:growl id="growl" showDetail="true" life="10000" />
+    	</h:form>
 		<h:form>
 			<h2>Bitte persönliche Informationen eintragen</h2>
-			<h:panelGrid columns="3">
-				<h:outputLabel value="Vorname: " for="vorname"/>
-				<h:inputText id="vorname" value="#{geisternetzController.meldendePerson.vorname}" size="40"/>
-				<h:message for="vorname" styleClass="error"/>
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Vorname: " for="vorname"/>
+				<p:inputText id="vorname" value="#{geisternetzController.aktuellePerson.vorname}" 
+					size="40"
+					required="true" requiredMessage="Bitte den Vornamen angeben."
+					validator="#{geisternetzController.pruefeName}"/>		
 				
-				<h:outputLabel value="Nachname: " for="nachname"/>
-				<h:inputText id="nachname" value="#{geisternetzController.meldendePerson.nachname}" size="40"/>
-				<h:message for="nachname" styleClass="error"/>
+				<p:outputLabel value="Nachname: " for="nachname"/>
+				<p:inputText id="nachname" value="#{geisternetzController.aktuellePerson.nachname}" 
+					size="40"
+					required="true" requiredMessage="Bitte den Nachnamen angeben."
+					validator="#{geisternetzController.pruefeName}"/>
 				
-				<h:outputLabel value="Telefonnummer (Optional): " for="telefonnummer"/>
-				<h:inputText id="telefonnummer" value="#{geisternetzController.meldendePerson.telefonnummer}" size="40"/>
-				<h:message for="telefonnummer" styleClass="error"/>
+				<p:outputLabel value="Telefonnummer (Optional): " for="telefonnummer"/>
+				<p:inputText id="telefonnummer" value="#{geisternetzController.aktuellePerson.telefonnummer}" 
+					size="40"
+					validator="#{geisternetzController.pruefeTelefonnummer}"/>
 			</h:panelGrid>
 			<p/>
 			<h2>Bitte Informationen über das Geisternetz eintragen</h2>
-			<h:panelGrid columns="3" >
-				<h:outputLabel value="Geschätzte Größe in Meter: " for="groesse"/>
-				<h:inputText id="groesse" value="#{geisternetzController.neuesGeisternetz.groesse}" size="40"/>
-				<h:message for="groesse" styleClass="error"/>
+			<h:panelGrid columns="2" >
+				<p:outputLabel value="Geographische Koordinaten - Breitengrad " for="breitengrad"/>
+				<p:inputNumber id="breitengrad" value="#{geisternetzController.neuesGeisternetz.breitengrad}" 
+					decimalPlaces="3" minValue="-90.000" maxValue="90.000"
+	
+					required="true" requiredMessage="Bitte den Breitengrad angeben."/>
 				 
-				<h:outputLabel value="Geographische Koordinaten - Breitengrad " for="breitengrad"/>
-				<h:inputText id="breitengrad" value="#{geisternetzController.neuesGeisternetz.breitengrad}" size="40"/>
-				<h:message for="breitengrad" styleClass="error"/>
-				 
-				<h:outputLabel value="Geographische Koordinaten - Längengrad " for="laengengrad"/>
-				<h:inputText id="laengengrad" value="#{geisternetzController.neuesGeisternetz.laengengrad}" size="40"/>
-				<h:message for="laengengrad" styleClass="error"/>
+				<p:outputLabel value="Geographische Koordinaten - Längengrad " for="laengengrad"/>
+				<p:inputNumber id="laengengrad" value="#{geisternetzController.neuesGeisternetz.laengengrad}" 
+					decimalPlaces="3" minValue="-180.000" maxValue="180.000"
+                   required="true" requiredMessage="Dieses Feld ist erforderlich." />
+				
+				<p:outputLabel value="Geschätzte Größe in Meter: " for="groesse"/>
+				<p:inputNumber id="groesse" value="#{geisternetzController.neuesGeisternetz.groesse}" 
+					decimalPlaces="0" minValue="1" maxValue="1000"
+					required="true" requiredMessage="Bitte die Größe des Netzes in Metern angeben."/>
 			</h:panelGrid>
 			<p/>
-			<h:commandButton action="#{geisternetzController.meldeInformationenSpeichern}" value="Meldeinformationen bestätigen" />
+			
+			<h:commandButton id="geisternetzBestaetigenButton" value="Meldeinformationen bestätigen" 
+    		action="#{geisternetzController.geisternetzSpeichern}" 
+    		process="@form" update="growl," validateClient="false" />
+			
 		</h:form>	
-		<p id="fussnote">Bitte beachten Sie: <br/> Diese Seite ist nur ein Entwurf!</p>
+		<p id="fussnote">* - Eingabe erforderlich</p>
+		<p id="fussnote">Bitte beachten Sie, diese Seite ist nur ein Entwurf!</p>
 	</h:body>
 </html>
