@@ -47,13 +47,12 @@
 				<p:outputLabel value="Geographische Koordinaten - Breitengrad " for="breitengrad"/>
 				<p:inputNumber id="breitengrad" value="#{geisternetzController.neuesGeisternetz.breitengrad}" 
 					decimalPlaces="3" minValue="-90.000" maxValue="90.000"
-	
 					required="true" requiredMessage="Bitte den Breitengrad angeben."/>
 				 
 				<p:outputLabel value="Geographische Koordinaten - Längengrad " for="laengengrad"/>
 				<p:inputNumber id="laengengrad" value="#{geisternetzController.neuesGeisternetz.laengengrad}" 
 					decimalPlaces="3" minValue="-180.000" maxValue="180.000"
-                   required="true" requiredMessage="Dieses Feld ist erforderlich." />
+                 	required="true" requiredMessage="Dieses Feld ist erforderlich." />
 				
 				<p:outputLabel value="Geschätzte Größe in Meter: " for="groesse"/>
 				<p:inputNumber id="groesse" value="#{geisternetzController.neuesGeisternetz.groesse}" 

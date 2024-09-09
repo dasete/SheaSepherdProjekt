@@ -8,18 +8,19 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 
+
 @Named
 @ApplicationScoped
 public class GeisternetzDAO {
 
 	EntityManager entityManager;
-    CriteriaBuilder criteriaBuilder;
+    CriteriaBuilder cb;
     EntityTransaction trans;
 
     public GeisternetzDAO() {
     	try {
             entityManager = Persistence.createEntityManagerFactory("ghostnetfishing").createEntityManager();
-            criteriaBuilder = entityManager.getCriteriaBuilder();
+            cb = entityManager.getCriteriaBuilder();
 
             long count = getGeisternetzCount();
             System.err.println(count+ " Geisternetze erfasst.");
@@ -45,21 +46,20 @@ public class GeisternetzDAO {
     
     //Löschen?
     public long getGeisternetzCount() {
-        CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
-        cq.select(criteriaBuilder.count(cq.from(Geisternetz.class)));
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        cq.select(cb.count(cq.from(Geisternetz.class)));
         return entityManager.createQuery(cq).getSingleResult();
     }
 
     //Löschen?
     public Geisternetz getGeisternetzAtIndex(int idx) {
-        CriteriaQuery<Geisternetz> cq = criteriaBuilder.createQuery(Geisternetz.class);
+        CriteriaQuery<Geisternetz> cq = cb.createQuery(Geisternetz.class);
         Root<Geisternetz> variableRoot = cq.from(Geisternetz.class);
         return entityManager.createQuery(cq).setMaxResults(1).setFirstResult(idx).getSingleResult();
     }
    
    
     public Geisternetz findeGeisternetzMitKoordinaten(float breitengrad, float laengengrad) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Geisternetz> cq = cb.createQuery(Geisternetz.class);
         Root<Geisternetz> root = cq.from(Geisternetz.class);
 
@@ -84,9 +84,9 @@ public class GeisternetzDAO {
         return entityManager.find(Geisternetz.class, id);
     }
     
-    
+ 
     public List<Geisternetz> getGeisternetze() {
-        CriteriaQuery<Geisternetz> cq = criteriaBuilder.createQuery(Geisternetz.class);
+        CriteriaQuery<Geisternetz> cq = cb.createQuery(Geisternetz.class);
         Root<Geisternetz> variableRoot = cq.from(Geisternetz.class);
         return entityManager.createQuery(cq).getResultList();
     }
@@ -103,15 +103,72 @@ public class GeisternetzDAO {
     	EntityTransaction trans = entityManager.getTransaction();
     	return trans;
     }
+    
+    public void persistGeisternetz(Geisternetz netz) {
+    	try {
+	        EntityTransaction trans = getAndBeginTransaction();
+	        persist(netz);
+	        trans.commit();
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
 
-    public void merge(Geisternetz netz) {
-        entityManager.merge(netz);
+	        // Transaktion rollback, falls trans bereits begonnen wurde
+	        EntityTransaction trans = getTransaction();
+	        if (trans != null && trans.isActive()) {
+	            trans.rollback();
+	        }
+	    }
+    }
+    
+    
+    public void mergeGeisternetz(Geisternetz netz) {
+    	try {
+            EntityTransaction trans = getAndBeginTransaction();
+            merge(netz);
+            trans.commit();
+             
+        } catch (Exception e) {
+        	EntityTransaction trans = getTransaction();
+        	if (trans != null && trans.isActive()) {
+            	trans.rollback();
+            }
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
     
     //speichert Objekt in Datenbank
     public void persist(Geisternetz netz) {
         entityManager.persist(netz);
     }
+    
+    public void merge(Geisternetz netz) {
+        entityManager.merge(netz);
+    }
+    
+    
+    public Person findePersonMitDaten(String vorname, String nachname, String telefonnummer) {
+        CriteriaQuery<Person> cq = cb.createQuery(Person.class);
+        Root<Person> root = cq.from(Person.class);
+
+        cq.select(root).where(
+            cb.and(
+                cb.equal(root.get("vorname"), vorname),
+                cb.equal(root.get("nachname"), nachname),
+                cb.equal(root.get("telefonnummer"), telefonnummer)
+            )
+        );
+
+        List<Person> resultList = entityManager.createQuery(cq).getResultList();
+
+        if (!resultList.isEmpty()) {
+            return resultList.get(0); // Gibt die erste gefundene Person zurück
+        } else {
+            return null; // Keine Person gefunden
+        }
+    }
+
 
     public static void main(String[] args) {
     	GeisternetzDAO dao = new GeisternetzDAO();

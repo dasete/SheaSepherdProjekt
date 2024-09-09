@@ -27,12 +27,14 @@ public class GeisternetzController{
         return geisternetzDAO.getGeisternetze();
     }
 	
+	
 	// von Button auf Startseite in Tabelle ausgeführt
 	public String weiterleitenZuNetzMelden() {
 		erstelleAktuellePerson();
-		erstelleGeisternetz();
+		erstelleNeuesGeisternetz();
 		return "netzMelden.xhtml?faces-redirect=true";
 	}
+	
 	
 	// von Button auf Startseite in Tabelle ausgeführt
 	public String weiterleitenZuBergungsabsichtEintragen(int geisternetzId) {
@@ -41,84 +43,69 @@ public class GeisternetzController{
         return "bergungBeabsichtigen.xhtml?faces-redirect=true";
     }
 	
+	
 	// in netzMelden.xthml von Button aufgerufen
 	public String geisternetzSpeichern() {
-		try {
-	        if (istGeisternetzmitKoordinatenBekannt()) {
-	            // Wenn bereits ein Geisternetz an diesen Koordinaten existiert, wird die Speicherung nicht durchgeführt
-	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-	                "Geisternetz bereits bekannt", "Ein Geisternetz an diesen Koordinaten wurde bereits gemeldet. Vielen Dank"));
-	            return null; // Keine Weiterleitung
-	        }
-
-	        neuesGeisternetz.setGemeldetVon(this.aktuellePerson);
-	        
-	        EntityTransaction trans = geisternetzDAO.getAndBeginTransaction();
-	        geisternetzDAO.persist(this.neuesGeisternetz);
-	        trans.commit();
-	        
-	        this.aktuellePerson = null;
-	        this.neuesGeisternetz = null;
-	        return "index.xhtml?faces-redirect=true";
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-
-	        // Transaktion rollback, falls trans bereits begonnen wurde
-	        EntityTransaction trans = geisternetzDAO.getTransaction();
-	        if (trans != null && trans.isActive()) {
-	            trans.rollback();
-	        }
-	        return null;  // Keine Weiterleitung
-	    }
-	}
-	
+		if (neuesGeisternetz == null || aktuellePerson == null) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
+			return null;
+		}
 		
-	
-	
-	
-	public boolean istGeisternetzmitKoordinatenBekannt() {
-	    float breitengrad = neuesGeisternetz.getBreitengrad();
-	    float laengengrad = neuesGeisternetz.getLaengengrad();
-
-	    // Suche nach existierenden Geisternetzen mit den gleichen Koordinaten
-	    Geisternetz vorhandenesNetz = geisternetzDAO.findeGeisternetzMitKoordinaten(breitengrad, laengengrad);
-
-	    if (vorhandenesNetz != null) {
-	        return true; // Geisternetz bereits bekannt
+		if (istGeisternetzmitKoordinatenBekannt()) {
+            // Wenn bereits ein Geisternetz an diesen Koordinaten existiert, wird die Speicherung nicht durchgeführt
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Geisternetz bereits bekannt", "Ein Geisternetz an diesen Koordinaten wurde bereits gemeldet. Vielen Dank"));
+            return null; // Keine Weiterleitung
+        }
+        
+	    Person existierendePerson = geisternetzDAO.findePersonMitDaten(
+	            aktuellePerson.getVorname(),
+	            aktuellePerson.getNachname(),
+	            aktuellePerson.getTelefonnummer()
+	    );
+	    if (existierendePerson != null) {
+	        // Falls Person existiert, zuweisen
+	        neuesGeisternetz.setGemeldetVon(existierendePerson);
+	    } else {
+	        // Falls Person nicht existiert, neu anlegen
+	        neuesGeisternetz.setGemeldetVon(this.aktuellePerson);
 	    }
-	    return false; // Geisternetz ist neu
+		
+		
+        geisternetzDAO.persistGeisternetz(this.neuesGeisternetz);
+		this.aktuellePerson = null;
+        this.neuesGeisternetz = null;
+        return "index.xhtml?faces-redirect=true";
 	}
-	
 	
 	// von Button in bergungBeabsichtigen ausgeführt
 	public String bergendePersonEintragen() {
-	    if (ausgewähltesGeisternetz != null && aktuellePerson != null) { 
-	    	try {
-	    		ausgewähltesGeisternetz.setBergendePerson(aktuellePerson);
-	            ausgewähltesGeisternetz.setStatus(Status.BERGUNG_BEVORSTEHEND);
-	            
-	            EntityTransaction trans = geisternetzDAO.getAndBeginTransaction();
-	            geisternetzDAO.merge(ausgewähltesGeisternetz);
-	            trans.commit();
-	            
-	            return "index.xhtml?faces-redirect=true";
-	        } catch (Exception e) {
-	        	EntityTransaction trans = geisternetzDAO.getTransaction();
-	        	if (trans != null && trans.isActive()) {
-	            	trans.rollback();
-	            }
-	            e.printStackTrace();
-	            throw new RuntimeException(e);
-	        }
-	    } else { // Fehleranzeige in Growl
-	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-	            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person und Geisternetz"));
+		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
+			return null;
+		}
+		
+		Person existierendePerson = geisternetzDAO.findePersonMitDaten(
+	            aktuellePerson.getVorname(),
+	            aktuellePerson.getNachname(),
+	            aktuellePerson.getTelefonnummer()
+	    );
+	    if (existierendePerson != null) {
+	        // Falls Person existiert, zuweisen
+	    	ausgewähltesGeisternetz.setBergendePerson(existierendePerson);
+	    } else {
+	        // Falls Person nicht existiert, neu anlegen
+	    	ausgewähltesGeisternetz.setBergendePerson(this.aktuellePerson);
 	    }
-	    return null;
+			
+        ausgewähltesGeisternetz.setStatus(Status.BERGUNG_BEVORSTEHEND);
+        geisternetzDAO.mergeGeisternetz(this.ausgewähltesGeisternetz);
+    	return "index.xhtml?faces-redirect=true";
 	}
 	
-	
+
 	//von Button auf Startseite in Tabelle ausgeführt
 	public boolean istStatusBergungBevorstehend(int geisternetzId) {
         Geisternetz geisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
@@ -130,25 +117,18 @@ public class GeisternetzController{
 	
 	
 	public void pruefeName(FacesContext ctx, UIComponent cmp, Object value) throws ValidatorException {
-	    // Überprüfen, ob der Wert null ist (optional, da `required="true"` gesetzt ist)
-	    if (value == null) {
-	        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-	                "Fehlender Name", "Name darf nicht leer sein");
-	        throw new ValidatorException(msg);
-	    }
-
 	    // Definiere den regulären Ausdruck für gültige Namen
 	    // Muss mindestens zwei Buchstaben enthalten und erlaubt die Sonderzeichen '-' und Leerzeichen
 	    final String NAME_REGEX = "^(?=.*[A-Za-z].*[A-Za-z])[A-Za-z- ]+$";
 
-	    // Erstelle das Pattern einmalig für bessere Übersicht
 	    Pattern pattern = Pattern.compile(NAME_REGEX);
 	    Matcher matcher = pattern.matcher(value.toString());
 
 	    // Prüfe, ob der Wert dem regulären Ausdruck entspricht
 	    if (!matcher.matches()) {
 	        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-	                "Fehlerhafter Name", "Name muss mindestens zwei Buchstaben enthalten und darf nur Buchstaben, Leerzeichen oder '-' enthalten.");
+	                "Fehlerhafter Name", 
+	                "Name muss mindestens zwei Buchstaben enthalten und darf nur Buchstaben, Leerzeichen oder '-' enthalten.");
 	        throw new ValidatorException(msg);
 	    }
 	}
@@ -156,10 +136,9 @@ public class GeisternetzController{
 	
 	public void pruefeTelefonnummer(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 	    // Regulären Ausdruck als Konstante definieren
-	    final String PHONE_NUMBER_REGEX = "^(\\+{0,1}\\d{1,3} ?)?\\d{3,15}$";
+	    final String NUMMER_REGEX = "^(\\+{0,1}\\d{1,3} ?)?\\d{3,15}$";
 
-	    // Pattern wird kompiliert
-	    Pattern pattern = Pattern.compile(PHONE_NUMBER_REGEX);
+	    Pattern pattern = Pattern.compile(NUMMER_REGEX);
 	    Matcher matcher = pattern.matcher(value.toString());
 
 	    // Wenn die Telefonnummer nicht dem Muster entspricht, eine Fehlermeldung auslösen
@@ -172,7 +151,18 @@ public class GeisternetzController{
 	}
 	
 	
-	private void erstelleGeisternetz() {
+	private boolean istGeisternetzmitKoordinatenBekannt() {
+	    float breitengrad = neuesGeisternetz.getBreitengrad();
+	    float laengengrad = neuesGeisternetz.getLaengengrad();
+	    Geisternetz vorhandenesNetz = geisternetzDAO.findeGeisternetzMitKoordinaten(breitengrad, laengengrad);
+	    if (vorhandenesNetz != null) {
+	        return true; // Geisternetz bereits bekannt
+	    }
+	    return false; // Geisternetz ist neu
+	}
+	
+	
+	private void erstelleNeuesGeisternetz() {
 		if (this.neuesGeisternetz != null) {
 			this.neuesGeisternetz = null;
 		}
