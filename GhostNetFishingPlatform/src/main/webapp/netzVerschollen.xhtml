@@ -10,14 +10,48 @@
 	</h:head>
 	
 	<h:body>
-		<p><img id="kopf_links" src="logo.png" width="250" alt="Logo"/></p>
-		<h1>Netz als Verschollen melden</h1>
-		<p>Geben Sie bitte ihren Namen und Ihre telfonnummer für eventuelle Rückfragen an</p>
-	   
+		<p><img id="kopf_links" src="logo.png" width="50" alt="Logo"/></p>
+		<h1>Netz als Verschollen melden</h1>	   
 		<h:form>
 			<h:commandButton action="index.xhtml?faces-redirect=true" value="Abbrechen" immediate="true"/>
 		</h:form>
-	  
+		<p/>
+		<h:form>
+        <!-- Growl-Komponente für globale Meldungen -->
+        <p:growl id="growl" showDetail="true" life="10000" />
+    	</h:form>
+		<h:form>
+			<p>Bitte tragen Sie Ihre persönlichen Informationen ein, wenn Sie das Geisternetz an 
+					den Koordinaten: N#{geisternetzController.ausgewähltesGeisternetz.breitengrad}°, 
+					E#{geisternetzController.ausgewähltesGeisternetz.laengengrad}° und mit der 
+					Größe von #{geisternetzController.ausgewähltesGeisternetz.groesse}m als verschollen melden möchten: </p>
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Vorname: " for="vorname"/>
+				<p:inputText id="vorname" value="#{geisternetzController.aktuellePerson.vorname}" 
+					size="40"
+					required="true" requiredMessage="Bitte den Vornamen angeben."
+					validator="#{geisternetzController.pruefeName}"/>		
+				
+				<p:outputLabel value="Nachname: " for="nachname"/>
+				<p:inputText id="nachname" value="#{geisternetzController.aktuellePerson.nachname}" 
+					size="40"
+					required="true" requiredMessage="Bitte den Nachnamen angeben."
+					validator="#{geisternetzController.pruefeName}"/>
+				
+				<p:outputLabel value="Telefonnummer: " for="telefonnummer"/>
+				<p:inputText id="telefonnummer" value="#{geisternetzController.aktuellePerson.telefonnummer}" 
+					size="40"
+					required="true" requiredMessage="Bitte Telefonnummer angeben."
+					validator="#{geisternetzController.pruefeTelefonnummer}"/>
+			</h:panelGrid>
+			<p/>
+			
+			<h:commandButton value="Netz als verschollen melden" 
+    		action="#{geisternetzController.geisternetzVerschollenMelden}" 
+    		process="@form" update="growl,"/>
+			
+		</h:form>	
+		<p id="fussnote">* - Eingabe erforderlich</p>
 		<p id="fussnote">Bitte beachten Sie, diese Seite ist nur ein Entwurf!</p>
 	</h:body>
 </html>

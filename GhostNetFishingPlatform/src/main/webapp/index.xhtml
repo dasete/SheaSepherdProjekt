@@ -10,7 +10,7 @@
     </h:head>
     
     <h:body>
-        <p><img id="kopf_links" src="logo.png" width="250" alt="Logo"/></p>
+        <p><img id="kopf_links" src="logo.png" width="50" alt="Logo"/></p>
         <h1>Shea Sepherd - Geisternetze melden und bergen</h1>
         
         <h:form>
@@ -19,7 +19,7 @@
         
         <h2>Liste aller aufgenommenen Geisternetze:</h2>
         
-        <h:dataTable var="geisternetz" value="#{geisternetzController.geisternetze}"
+        <h:dataTable var="geisternetz" value="#{geisternetzController.nichtGeborgeneOderVerscholleneGeisternetze}"
                     styleClass="geisternetz" rowClasses="ungerade, gerade">
             <h:column>
                 <f:facet name="header">GPS-Koordinaten</f:facet>
@@ -33,14 +33,15 @@
             
             <h:column>
                 <f:facet name="header">Status</f:facet>
-                <h:outputText value="#{geisternetz.status}"/>
+                <h:outputText value="#{geisternetzController.getStatusText(geisternetz.status)}"/>
             </h:column>
             
             <h:column>
                 <f:facet name="header">Bergungsabsicht eintragen</f:facet>
                 <h:form>
                 <h:commandButton action="#{geisternetzController.weiterleitenZuBergungsabsichtEintragen(geisternetz.id)}"
-                                 value="Bergungsabsicht eintragen" immediate="true"
+                                 value="Bergungsabsicht eintragen" 
+                                 immediate="true"
                                  disabled="#{geisternetzController.istStatusBergungBevorstehend(geisternetz.id)}"/>
             	</h:form>
             </h:column>
@@ -48,19 +49,18 @@
             <h:column>
                 <f:facet name="header">Bergung bestätigen</f:facet>
                 <h:form>
-	                <h:commandButton action="bergungBestaetigen.xhtml?faces-redirect=true"
+	                <h:commandButton action="#{geisternetzController.weiterleitenZuBergungBestaetigen(geisternetz.id)}"
 	                                 value="Bergung bestätigen" 
-	                                 immediate="true"
-	                                 />
-	                                 
+	                                 immediate="true"/>
                 </h:form>
             </h:column>
             
             <h:column>
                 <f:facet name="header">Netz als Verschollen melden</f:facet>
                 <h:form>
-	                <h:commandButton action="netzVerschollen.xhtml?faces-redirect=true"
-	                                 value="Netz als Verschollen melden" immediate="true"/>
+	                <h:commandButton action="#{geisternetzController.weiterleitenZuNetzVerschollen(geisternetz.id)}"
+	                                 value="Netz als Verschollen melden" 
+	                                 immediate="true"/>
                 </h:form>
             </h:column>
         

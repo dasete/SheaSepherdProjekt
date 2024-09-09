@@ -10,7 +10,7 @@
 	</h:head>
 	
 	<h:body>
-		<p><img id="kopf_links" src="logo.png" width="250" alt="Logo"/></p>
+		<p><img id="kopf_links" src="logo.png" width="50" alt="Logo"/></p>
 		<h1>Geisternetz-Bergung beantragen</h1>
 		<h:form>
 			<h:commandButton action="index.xhtml?faces-redirect=true" value="Abbrechen" immediate="true"/>
@@ -18,10 +18,13 @@
 		<p/>
 		<h:form>
         <!-- Growl-Komponente für globale Meldungen -->
-        <p:growl id="growl" showDetail="true" life="5000" />
+        <p:growl id="growl" showDetail="true" life="10000" />
     	</h:form>
 		<h:form>
-			<h2>Bitte tragen Sie ihre persönlichen Informationen ein, wenn Sie sich als bergende Person für das Geisternetz an den Koordinaten: mit der Größe: eintragen lassen möchten: </h2>
+			<p>Bitte tragen Sie Ihre persönlichen Informationen ein, wenn Sie sich als bergende Person 
+					für das Geisternetz an den Koordinaten: N#{geisternetzController.ausgewähltesGeisternetz.breitengrad}°, 
+					E#{geisternetzController.ausgewähltesGeisternetz.laengengrad}° und mit der 
+					Größe von #{geisternetzController.ausgewähltesGeisternetz.groesse}m eintragen lassen möchten: </p>
 			<h:panelGrid columns="2">
 				<p:outputLabel value="Vorname: " for="vorname"/>
 				<p:inputText id="vorname" value="#{geisternetzController.aktuellePerson.vorname}" 

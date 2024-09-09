@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import jakarta.faces.application.FacesMessage;
@@ -22,10 +23,15 @@ public class GeisternetzController{
 	@Inject
     GeisternetzDAO geisternetzDAO;
 	
+	
 	//für Anzeige auf Startseite
-	public List<Geisternetz> getGeisternetze() {
-        return geisternetzDAO.getGeisternetze();
-    }
+	public List<Geisternetz> getNichtGeborgeneOderVerscholleneGeisternetze() {
+	    List<Geisternetz> alleGeisternetze = geisternetzDAO.getGeisternetze();
+	    return alleGeisternetze.stream()
+	                           .filter(geisternetz -> geisternetz.getStatus() != Status.GEBORGEN &&
+	                                                  geisternetz.getStatus() != Status.VERSCHOLLEN) // Filtert "Geborgen" und "Verschollen" aus
+	                           .collect(Collectors.toList());
+	}
 	
 	
 	// von Button auf Startseite in Tabelle ausgeführt
@@ -35,12 +41,27 @@ public class GeisternetzController{
 		return "netzMelden.xhtml?faces-redirect=true";
 	}
 	
-	
+
 	// von Button auf Startseite in Tabelle ausgeführt
 	public String weiterleitenZuBergungsabsichtEintragen(int geisternetzId) {
         this.ausgewähltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
         erstelleAktuellePerson();
         return "bergungBeabsichtigen.xhtml?faces-redirect=true";
+    }
+	
+	
+	// von Button auf Startseite in Tabelle ausgeführt
+	public String weiterleitenZuBergungBestaetigen(int geisternetzId) {
+        this.ausgewähltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
+        erstelleAktuellePerson();
+        return "bergungBestaetigen.xhtml?faces-redirect=true";
+    }
+	
+	// von Button auf Startseite in Tabelle ausgeführt
+	public String weiterleitenZuNetzVerschollen(int geisternetzId) {
+        this.ausgewähltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
+        erstelleAktuellePerson();
+        return "netzVerschollen.xhtml?faces-redirect=true";
     }
 	
 	
@@ -79,6 +100,7 @@ public class GeisternetzController{
         return "index.xhtml?faces-redirect=true";
 	}
 	
+	
 	// von Button in bergungBeabsichtigen ausgeführt
 	public String bergendePersonEintragen() {
 		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
@@ -105,6 +127,69 @@ public class GeisternetzController{
     	return "index.xhtml?faces-redirect=true";
 	}
 	
+	
+	// von Button in bergungBestätigen ausgeführt
+	public String bergungBestaetigen() {
+		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
+			return null;
+		}
+		
+		Person bergendePerson = ausgewähltesGeisternetz.getBergendePerson();
+	    if (bergendePerson == null) {
+	    	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
+			return null;
+	    }
+	    
+	   
+    	// Vergleichen, ob die aktuelle Person dieselbe ist wie die bergende Person
+        boolean gleichePerson = bergendePerson.getVorname().equals(aktuellePerson.getVorname()) &&
+                                bergendePerson.getNachname().equals(aktuellePerson.getNachname()) &&
+                                bergendePerson.getTelefonnummer().equals(aktuellePerson.getTelefonnummer());
+		
+        if (!gleichePerson) {
+            // Wenn es eine andere Person ist, Fehlermeldung anzeigen und nicht weiterleiten
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Bergung nicht möglich", "Das Geisternetz wird bereits von einer anderen Person geborgen."
+                    		+ "Falls Sie das Geisternetz trotzdem borgen möchten oder bereits geborgen haben,"
+                    		+ "melden Sie sich bitte bei +49 1234567. Vielen Dank"));
+            return null; // Keine Weiterleitung
+        }
+        
+        ausgewähltesGeisternetz.setStatus(Status.GEBORGEN);
+        geisternetzDAO.mergeGeisternetz(this.ausgewähltesGeisternetz);
+        return "index.xhtml?faces-redirect=true";
+	}
+	
+
+	// von Button in bergungBeabsichtigen ausgeführt
+	public String geisternetzVerschollenMelden() {
+		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
+			return null;
+		}
+		
+		Person existierendePerson = geisternetzDAO.findePersonMitDaten(
+	            aktuellePerson.getVorname(),
+	            aktuellePerson.getNachname(),
+	            aktuellePerson.getTelefonnummer()
+	    );
+	    if (existierendePerson != null) {
+	        // Falls Person existiert, zuweisen
+	    	ausgewähltesGeisternetz.setVerschollenGemeldetVon(existierendePerson);
+	    } else {
+	        // Falls Person nicht existiert, neu anlegen
+	    	ausgewähltesGeisternetz.setVerschollenGemeldetVon(this.aktuellePerson);
+	    }
+			
+        ausgewähltesGeisternetz.setStatus(Status.VERSCHOLLEN);
+        geisternetzDAO.mergeGeisternetz(this.ausgewähltesGeisternetz);
+    	return "index.xhtml?faces-redirect=true";
+	}
+	
 
 	//von Button auf Startseite in Tabelle ausgeführt
 	public boolean istStatusBergungBevorstehend(int geisternetzId) {
@@ -114,7 +199,6 @@ public class GeisternetzController{
         }
         return false;
     }
-	
 	
 	public void pruefeName(FacesContext ctx, UIComponent cmp, Object value) throws ValidatorException {
 	    // Definiere den regulären Ausdruck für gültige Namen
@@ -154,12 +238,28 @@ public class GeisternetzController{
 	private boolean istGeisternetzmitKoordinatenBekannt() {
 	    float breitengrad = neuesGeisternetz.getBreitengrad();
 	    float laengengrad = neuesGeisternetz.getLaengengrad();
-	    Geisternetz vorhandenesNetz = geisternetzDAO.findeGeisternetzMitKoordinaten(breitengrad, laengengrad);
-	    if (vorhandenesNetz != null) {
-	        return true; // Geisternetz bereits bekannt
+	    List<Geisternetz> vorhandeneNetze = geisternetzDAO.findeGeisternetzMitKoordinaten(breitengrad, laengengrad);
+	    
+	    // Überprüfen, ob eines der Geisternetze den Status weder 'VERSCHOLLEN' noch 'GEBORGEN' hat
+	    for (Geisternetz netz : vorhandeneNetze) {
+	        if (netz.getStatus() != Status.VERSCHOLLEN && netz.getStatus() != Status.GEBORGEN) {
+	            return true; // Geisternetz mit gleichen Koordinaten bereits aufgenommen
+	        }
 	    }
-	    return false; // Geisternetz ist neu
+	    return false; // Kein Geisternetz mit den gleichen Koordinaten gefunden oder alle haben den Status 'VERSCHOLLEN' oder 'GEBORGEN'
 	}
+	
+	
+	public String getStatusText(Status status) {
+        switch (status) {
+            case BERGUNG_BEVORSTEHEND:
+                return "Bergung bevorstehend";
+            case GEMELDET:
+                return "Gemeldet";
+            default:
+                return status.toString();
+        }
+    }
 	
 	
 	private void erstelleNeuesGeisternetz() {
