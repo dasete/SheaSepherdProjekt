@@ -26,10 +26,9 @@ public class Geisternetz implements Serializable {
     public Geisternetz()
     {
 		this.status = Status.GEMELDET;
-		//this.bergendePerson = null;
-		//this.meldendePerson = null;
     }
 
+    
     public Geisternetz(float breitengrad, float laengengrad, int groesse, Status status, Person mPerson)
     {
 		this.breitengrad = breitengrad;
@@ -39,62 +38,74 @@ public class Geisternetz implements Serializable {
 		this.gemeldetVon = mPerson;
     }
 
+    
     public int getId()
     {
         return id;
     }
 
+    
     public void setId(int id)
     {
         this.id = id;
     }
+    
     
     public int getGroesse()
     {
         return groesse;
     }
 
+    
     public void setGroesse(int groesse)
     {
         this.groesse = groesse;
     }
+    
     
     public float getBreitengrad()
     {
         return breitengrad;
     }
 
+    
     public void setBreitengrad(float breitengrad)
     {
         this.breitengrad = breitengrad;
     }
+    
     
     public float getLaengengrad()
     {
         return laengengrad;
     }
 
+    
     public void setLaengengrad(float laengengrad)
     {
         this.laengengrad = laengengrad;
     }
     
+    
     public Status getStatus() {
 		return status;
 	}
 
+    
 	public void setStatus(Status status) {
 		this.status = status;
 	}
 	
+	
 	public Person getBergendePerson() {
 		return bergendePerson;
 	}
-	
+
 	
 	public void setBergendePerson(Person bergendePerson) {
 		this.bergendePerson = bergendePerson;
 	}
+	
 	
 	public Person getGemeldetVon() {
 		return gemeldetVon;
@@ -104,6 +115,7 @@ public class Geisternetz implements Serializable {
 	public void setGemeldetVon(Person gemeldetVon) {
 		this.gemeldetVon = gemeldetVon;
 	}
+	
 	
 	public Person getVerschollenGemeldetVon() {
 		return verschollenGemeldetVon;
