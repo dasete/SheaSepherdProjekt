@@ -13,21 +13,9 @@ public class Person implements Serializable {
 	private String vorname;
 	private String nachname;
 	private String telefonnummer;
-	
-	/*
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	private List<Geisternetz> zuBergendeGeisternetze = new ArrayList<>();
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	private List<Geisternetz> gemeldeteGeisternetze = new ArrayList<>();
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	private List<Geisternetz> geborgendeGeisternetze = new ArrayList<>();
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true)
-	private List<Geisternetz> verschollenGemeldeteGeisternetze = new ArrayList<>();
-	*/
-	
+
 	public Person()
 	{
-		
 	}
 	
 	public Person(String vorname, String nachname)
@@ -48,6 +36,7 @@ public class Person implements Serializable {
     {
         return id;
     }
+	
     public void setId(int id)
     {
         this.id = id;
@@ -77,36 +66,4 @@ public class Person implements Serializable {
 		this.telefonnummer = telefonnummer;
 	}
 	
-	/*
-	public List<Geisternetz> getZuBergendeGeisternetze() {
-		return zuBergendeGeisternetze;
-	}
-	public void setZuBergendeGeisternetze( List<Geisternetz> zuBergendeGeisternetze) {
-		this.zuBergendeGeisternetze = zuBergendeGeisternetze;
-	}
-	
-	
-	public List<Geisternetz> getGemeldeteGeisternetze() {
-		return gemeldeteGeisternetze;
-	}
-	public void setGemeldeteGeisternetze( List<Geisternetz> gemeldeteGeisternetze) {
-		this.gemeldeteGeisternetze = gemeldeteGeisternetze;
-	}
-	
-	
-	public List<Geisternetz> getGeborgendeGeisternetze() {
-		return geborgendeGeisternetze;
-	}
-	public void setGeborgendeGeisternetze( List<Geisternetz> geborgendeGeisternetze) {
-		this.geborgendeGeisternetze = geborgendeGeisternetze;
-	}
-	
-	
-	public List<Geisternetz> getVerschollenGemeldeteGeisternetze() {
-		return verschollenGemeldeteGeisternetze;
-	}
-	public void setVerschollenGemeldeteGeisternetze( List<Geisternetz> verschollenGemeldeteGeisternetze) {
-		this.verschollenGemeldeteGeisternetze = verschollenGemeldeteGeisternetze;
-	}
-	*/
 }

@@ -51,7 +51,8 @@
                 <h:form>
 	                <h:commandButton action="#{geisternetzController.weiterleitenZuBergungBestaetigen(geisternetz.id)}"
 	                                 value="Bergung bestätigen" 
-	                                 immediate="true"/>
+	                                 immediate="true"
+	                                 disabled="#{geisternetzController.istStatusGemeldet(geisternetz.id)}"/>
                 </h:form>
             </h:column>
             

@@ -9,7 +9,6 @@ import jakarta.persistence.criteria.Root;
 import java.util.List;
 
 
-@Named
 @ApplicationScoped
 public class GeisternetzDAO {
 
@@ -44,21 +43,14 @@ public class GeisternetzDAO {
         }
     }
     
-    //Löschen?
+    
     public long getGeisternetzCount() {
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         cq.select(cb.count(cq.from(Geisternetz.class)));
         return entityManager.createQuery(cq).getSingleResult();
     }
 
-    //Löschen?
-    public Geisternetz getGeisternetzAtIndex(int idx) {
-        CriteriaQuery<Geisternetz> cq = cb.createQuery(Geisternetz.class);
-        Root<Geisternetz> variableRoot = cq.from(Geisternetz.class);
-        return entityManager.createQuery(cq).setMaxResults(1).setFirstResult(idx).getSingleResult();
-    }
-   
-   
+     
     public List<Geisternetz> findeGeisternetzMitKoordinaten(float breitengrad, float laengengrad) {
         CriteriaQuery<Geisternetz> cq = cb.createQuery(Geisternetz.class);
         Root<Geisternetz> root = cq.from(Geisternetz.class);
@@ -155,7 +147,6 @@ public class GeisternetzDAO {
         }
     }
     
-    //speichert Objekt in Datenbank
     public void persist(Geisternetz netz) {
         entityManager.persist(netz);
     }
@@ -164,10 +155,4 @@ public class GeisternetzDAO {
         entityManager.merge(netz);
     }
 
-
-    public static void main(String[] args) {
-    	GeisternetzDAO dao = new GeisternetzDAO();
-        System.err.println(dao.getGeisternetzCount() + " Geisternetze erfasst.");
-    }
-	
 }

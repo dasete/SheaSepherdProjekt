@@ -18,7 +18,7 @@ public class GeisternetzController{
 	
 	private Geisternetz neuesGeisternetz;
 	private Person aktuellePerson;
-	private Geisternetz ausgewähltesGeisternetz;
+	private Geisternetz ausgewaehltesGeisternetz;
 	
 	@Inject
     GeisternetzDAO geisternetzDAO;
@@ -44,7 +44,7 @@ public class GeisternetzController{
 
 	// von Button auf Startseite in Tabelle ausgeführt
 	public String weiterleitenZuBergungsabsichtEintragen(int geisternetzId) {
-        this.ausgewähltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
+        this.ausgewaehltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
         erstelleAktuellePerson();
         return "bergungBeabsichtigen.xhtml?faces-redirect=true";
     }
@@ -52,14 +52,14 @@ public class GeisternetzController{
 	
 	// von Button auf Startseite in Tabelle ausgeführt
 	public String weiterleitenZuBergungBestaetigen(int geisternetzId) {
-        this.ausgewähltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
+        this.ausgewaehltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
         erstelleAktuellePerson();
         return "bergungBestaetigen.xhtml?faces-redirect=true";
     }
 	
 	// von Button auf Startseite in Tabelle ausgeführt
 	public String weiterleitenZuNetzVerschollen(int geisternetzId) {
-        this.ausgewähltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
+        this.ausgewaehltesGeisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
         erstelleAktuellePerson();
         return "netzVerschollen.xhtml?faces-redirect=true";
     }
@@ -103,7 +103,7 @@ public class GeisternetzController{
 	
 	// von Button in bergungBeabsichtigen ausgeführt
 	public String bergendePersonEintragen() {
-		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
+		if (ausgewaehltesGeisternetz == null || aktuellePerson == null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
 			return null;
@@ -116,27 +116,27 @@ public class GeisternetzController{
 	    );
 	    if (existierendePerson != null) {
 	        // Falls Person existiert, zuweisen
-	    	ausgewähltesGeisternetz.setBergendePerson(existierendePerson);
+	    	ausgewaehltesGeisternetz.setBergendePerson(existierendePerson);
 	    } else {
 	        // Falls Person nicht existiert, neu anlegen
-	    	ausgewähltesGeisternetz.setBergendePerson(this.aktuellePerson);
+	    	ausgewaehltesGeisternetz.setBergendePerson(this.aktuellePerson);
 	    }
 			
-        ausgewähltesGeisternetz.setStatus(Status.BERGUNG_BEVORSTEHEND);
-        geisternetzDAO.mergeGeisternetz(this.ausgewähltesGeisternetz);
+        ausgewaehltesGeisternetz.setStatus(Status.BERGUNG_BEVORSTEHEND);
+        geisternetzDAO.mergeGeisternetz(this.ausgewaehltesGeisternetz);
     	return "index.xhtml?faces-redirect=true";
 	}
 	
 	
 	// von Button in bergungBestätigen ausgeführt
 	public String bergungBestaetigen() {
-		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
+		if (ausgewaehltesGeisternetz == null || aktuellePerson == null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
 			return null;
 		}
 		
-		Person bergendePerson = ausgewähltesGeisternetz.getBergendePerson();
+		Person bergendePerson = ausgewaehltesGeisternetz.getBergendePerson();
 	    if (bergendePerson == null) {
 	    	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
@@ -158,15 +158,15 @@ public class GeisternetzController{
             return null; // Keine Weiterleitung
         }
         
-        ausgewähltesGeisternetz.setStatus(Status.GEBORGEN);
-        geisternetzDAO.mergeGeisternetz(this.ausgewähltesGeisternetz);
+        ausgewaehltesGeisternetz.setStatus(Status.GEBORGEN);
+        geisternetzDAO.mergeGeisternetz(this.ausgewaehltesGeisternetz);
         return "index.xhtml?faces-redirect=true";
 	}
 	
 
 	// von Button in bergungBeabsichtigen ausgeführt
 	public String geisternetzVerschollenMelden() {
-		if (ausgewähltesGeisternetz == null || aktuellePerson == null) {
+		if (ausgewaehltesGeisternetz == null || aktuellePerson == null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 		            "Fehlende Daten", "Fehler bei Verarbeitung von aktueller Person oder Geisternetz"));
 			return null;
@@ -179,14 +179,14 @@ public class GeisternetzController{
 	    );
 	    if (existierendePerson != null) {
 	        // Falls Person existiert, zuweisen
-	    	ausgewähltesGeisternetz.setVerschollenGemeldetVon(existierendePerson);
+	    	ausgewaehltesGeisternetz.setVerschollenGemeldetVon(existierendePerson);
 	    } else {
 	        // Falls Person nicht existiert, neu anlegen
-	    	ausgewähltesGeisternetz.setVerschollenGemeldetVon(this.aktuellePerson);
+	    	ausgewaehltesGeisternetz.setVerschollenGemeldetVon(this.aktuellePerson);
 	    }
 			
-        ausgewähltesGeisternetz.setStatus(Status.VERSCHOLLEN);
-        geisternetzDAO.mergeGeisternetz(this.ausgewähltesGeisternetz);
+        ausgewaehltesGeisternetz.setStatus(Status.VERSCHOLLEN);
+        geisternetzDAO.mergeGeisternetz(this.ausgewaehltesGeisternetz);
     	return "index.xhtml?faces-redirect=true";
 	}
 	
@@ -199,6 +199,16 @@ public class GeisternetzController{
         }
         return false;
     }
+	
+	//von Button auf Startseite in Tabelle ausgeführt
+		public boolean istStatusGemeldet(int geisternetzId) {
+	        Geisternetz geisternetz = geisternetzDAO.findeGeisternetzMitId(geisternetzId);
+	        if (geisternetz != null) {
+	            return geisternetz.getStatus() == Status.GEMELDET;
+	        }
+	        return false;
+	    }
+	
 	
 	public void pruefeName(FacesContext ctx, UIComponent cmp, Object value) throws ValidatorException {
 	    // Definiere den regulären Ausdruck für gültige Namen
@@ -235,6 +245,19 @@ public class GeisternetzController{
 	}
 	
 	
+	// für Status Text in Tabelle auf Startseite
+	public String getStatusText(Status status) {
+        switch (status) {
+            case BERGUNG_BEVORSTEHEND:
+                return "Bergung bevorstehend";
+            case GEMELDET:
+                return "Gemeldet";
+            default:
+                return status.toString();
+        }
+    }
+	
+	
 	private boolean istGeisternetzmitKoordinatenBekannt() {
 	    float breitengrad = neuesGeisternetz.getBreitengrad();
 	    float laengengrad = neuesGeisternetz.getLaengengrad();
@@ -249,31 +272,12 @@ public class GeisternetzController{
 	    return false; // Kein Geisternetz mit den gleichen Koordinaten gefunden oder alle haben den Status 'VERSCHOLLEN' oder 'GEBORGEN'
 	}
 	
-	
-	public String getStatusText(Status status) {
-        switch (status) {
-            case BERGUNG_BEVORSTEHEND:
-                return "Bergung bevorstehend";
-            case GEMELDET:
-                return "Gemeldet";
-            default:
-                return status.toString();
-        }
-    }
-	
-	
 	private void erstelleNeuesGeisternetz() {
-		if (this.neuesGeisternetz != null) {
-			this.neuesGeisternetz = null;
-		}
 		this.neuesGeisternetz = new Geisternetz();
 	}
 	
 
 	private void erstelleAktuellePerson() {
-		if (this.aktuellePerson != null) {
-			this.aktuellePerson = null;
-		}
 		this.aktuellePerson = new Person();
 	}
 	
@@ -294,12 +298,12 @@ public class GeisternetzController{
 		this.aktuellePerson = aktuellePerson;
 	}
 
-    public Geisternetz getAusgewähltesGeisternetz() {
-        return ausgewähltesGeisternetz;
+    public Geisternetz getAusgewaehltesGeisternetz() {
+        return ausgewaehltesGeisternetz;
     }
     
-    public void setAusgewähltesGeisternetz(Geisternetz geisternetz) {
-        this.ausgewähltesGeisternetz = geisternetz;
+    public void setAusgewaehltesGeisternetz(Geisternetz geisternetz) {
+        this.ausgewaehltesGeisternetz = geisternetz;
     }
 	
 }
